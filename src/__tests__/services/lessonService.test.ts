@@ -18,7 +18,7 @@ describe('LessonService', () => {
         const result: ValidationResult = lessonService.validateLesson(lessonRequest);
         
         expect(result.isValid).toBe(true);
-        expect(result.price).toBe(50.00);
+        expect(result.price).toBe(30.00);
         expect(result.numberOfLessons).toBe(1);
     });
 
@@ -31,7 +31,7 @@ describe('LessonService', () => {
         const result: ValidationResult = lessonService.validateLesson(lessonRequest);
         
         expect(result.isValid).toBe(true);
-        expect(result.price).toBe(70.00);  // Assuming $70 for a 45-minute lesson
+        expect(result.price).toBe(45.00);  // Assuming $70 for a 45-minute lesson
         expect(result.numberOfLessons).toBe(1);
     });
 
@@ -44,23 +44,54 @@ describe('LessonService', () => {
         const result: ValidationResult = lessonService.validateLesson(lessonRequest);
         
         expect(result.isValid).toBe(true);
-        expect(result.price).toBe(90.00);
+        expect(result.price).toBe(60.00);
         expect(result.numberOfLessons).toBe(1);
     });
 
-    // Testing package validation
-    it('should validate a package of four 45-minute lessons', () => {
-        const lessonRequest: LessonRequest = {
-            duration: 45,
-            isPackage: true
-        };
 
-        const result: ValidationResult = lessonService.validateLesson(lessonRequest);
-        
-        expect(result.isValid).toBe(true);
-        expect(result.price).toBe(250.00);  // Assuming discounted package price
-        expect(result.numberOfLessons).toBe(4);
-    });
+    it('should validate a package of four 30-minute lessons', () => {
+      const lessonRequest: LessonRequest = {
+          duration: 30,
+          isPackage: true
+      };
+
+      const result: ValidationResult = lessonService.validateLesson(lessonRequest);
+      
+      // Package of four 30-minute lessons at discounted rate
+      expect(result.isValid).toBe(true);
+      expect(result.price).toBe(110.00);
+      expect(result.numberOfLessons).toBe(4);
+  });
+
+  it('should validate a package of four 45-minute lessons', () => {
+      const lessonRequest: LessonRequest = {
+          duration: 45,
+          isPackage: true
+      };
+
+      const result: ValidationResult = lessonService.validateLesson(lessonRequest);
+      
+      // Package of four 45-minute lessons at discounted rate
+      expect(result.isValid).toBe(true);
+      expect(result.price).toBe(170.00);
+      expect(result.numberOfLessons).toBe(4);
+  });
+
+  it('should validate a package of four 60-minute lessons', () => {
+      const lessonRequest: LessonRequest = {
+          duration: 60,
+          isPackage: true
+      };
+
+      const result: ValidationResult = lessonService.validateLesson(lessonRequest);
+      
+      // Package of four 60-minute lessons at discounted rate
+      expect(result.isValid).toBe(true);
+      expect(result.price).toBe(220.00);
+      expect(result.numberOfLessons).toBe(4);
+  });
+
+    
 
     it('should reject an invalid lesson duration', () => {
         const lessonRequest: LessonRequest = {
