@@ -1,18 +1,21 @@
 // src/services/lessonService.ts
-import { LessonRequest, ValidationResult } from '../types/lesson';
+import { LessonRequest, ValidationResult, LessonDuration } from '../types/lesson';
 
 export class LessonService {
     // Define our pricing structure
-    private readonly lessonPricing = {
+    private readonly lessonPricing: {
+        single: { [K in LessonDuration]: number };
+        package: { [K in LessonDuration]: number };
+    } = {
         single: {
-            30: 30.00,
-            45: 45.00,
-            60: 60.00
+            30: 50.00,
+            45: 70.00,
+            60: 90.00
         },
         package: {
-            30: 110.00,  // 4 lessons at a discount
-            45: 170.00,
-            60: 220.00
+            30: 180.00,
+            45: 250.00,
+            60: 320.00
         }
     };
 
@@ -25,10 +28,12 @@ export class LessonService {
             };
         }
 
+        const duration = request.duration as LessonDuration;
+
         // Get the appropriate price based on duration and package type
         const price = request.isPackage 
-            ? this.lessonPricing.package[request.duration]
-            : this.lessonPricing.single[request.duration];
+            ? this.lessonPricing.package[duration]
+            : this.lessonPricing.single[duration];
         
         // Packages always contain 4 lessons
         const numberOfLessons = request.isPackage ? 4 : 1;
