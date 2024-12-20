@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 export interface LessonRequest {
   duration: number;
   isPackage: boolean; 
@@ -6,7 +8,7 @@ export interface LessonRequest {
 export interface ValidationResult {
   isValid: boolean;
   error?: string;
-  price?: number;
+  price?: number | Prisma.Decimal;
   numberOfLessons?: number;
 }
 

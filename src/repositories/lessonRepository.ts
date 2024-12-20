@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 interface CreateLessonData {
     duration: number;
-    price: number;
+    price: Prisma.Decimal;
     isPackage: boolean;
     numberOfLessons: number;
 }
