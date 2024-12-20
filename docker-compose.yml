@@ -1,0 +1,37 @@
+# docker-compose.yml
+
+# Version of Docker Compose 
+version: '3.8'
+
+# Define the services (containers) to run
+services:
+  # main development database
+  postgres:
+    image: postgres:14  # 
+    container_name: music_lessons_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: music_lessons
+    ports:
+      # Maps port 5432 on computer to port 5432 in the container
+      - "5432:5432"
+    volumes:
+      # Stores database data persistently on computer
+      - postgres_data:/var/lib/postgresql/data
+    
+  # Our test database in a separate container
+  postgres_test:
+    image: postgres:14
+    container_name: music_lessons_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: music_lessons_test
+    ports:
+      # Uses a different port to avoid conflicts with development database
+      - "5433:5432"
+
+# Define named volumes for persistent data storage
+volumes:
+  postgres_data:
