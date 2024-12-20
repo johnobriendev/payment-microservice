@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Lesson {
+  id             String   @id @default(uuid())
+  duration       Int      // 30, 45, or 60 minutes
+  price          Decimal  @db.Decimal(10, 2)
+  isPackage      Boolean  @default(false)
+  numberOfLessons Int     @default(1)
+  orders         Order[]  // This creates a relationship with orders
+  createdAt      DateTime @default(now())
+
+  @@index([duration, isPackage]) // Add an index for faster lookups
+}
+
+model Order {
+  id              String   @id @default(uuid())
+  lessonId        String
+  lesson          Lesson   @relation(fields: [lessonId], references: [id])
+  customerEmail   String
+  customerName    String
+  status          String   // pending, completed, failed
+  paymentIntentId String?  // The Stripe payment intent ID
+  createdAt       DateTime @default(now())
+
+  @@index([status]) // Add an index for querying by status
+}
